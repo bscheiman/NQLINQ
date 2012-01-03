@@ -1,0 +1,4 @@
+NQLINQ (Not Quite LINQ)
+====
+
+Lightweight DAO, based on .NET's LINQ-to-SQL. Currently only Oracle (XE et al) is supported OOB.

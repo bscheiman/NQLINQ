@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: log4j-1.2.16.jar ojdbc5.jar ant.jar
+Main-Class: org.nqlinq.TestApp
+

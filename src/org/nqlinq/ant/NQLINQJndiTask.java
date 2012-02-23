@@ -9,13 +9,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings({ "ALL" })
-public class NQLINQTask extends Task {
+public class NQLINQJndiTask extends Task {
     private String SqlFile;
     private String Name;
-    private String Driver;
+    private String Source;
     private String Url;
-    private String User;
-    private String Password;
     private String Package;
     private String Src;
     private String Sequence;
@@ -45,12 +43,12 @@ public class NQLINQTask extends Task {
         Package = pkg;
     }
 
-    public String getDriver() {
-        return Driver;
+    public String getSource() {
+        return Source;
     }
 
-    public void setDriver(String driver) {
-        Driver = driver;
+    public void setSource(String source) {
+        Source = source;
     }
 
     public String getUrl() {
@@ -59,22 +57,6 @@ public class NQLINQTask extends Task {
 
     public void setUrl(String url) {
         Url = url;
-    }
-
-    public String getUser() {
-        return User;
-    }
-
-    public void setUser(String user) {
-        User = user;
-    }
-
-    public String getPassword() {
-        return Password;
-    }
-
-    public void setPassword(String password) {
-        Password = password;
     }
 
     public String getName() {
@@ -97,9 +79,10 @@ public class NQLINQTask extends Task {
         String unitOfWork = MessageFormat.format("{0}UnitOfWork", getName());
         System.out.println(MessageFormat.format("Processing file: {0}...", getSqlFile()));
         System.out.println(MessageFormat.format("Unit of Work: {0}", unitOfWork));
+        System.out.println(MessageFormat.format("Source: {0}", getSource()));
 
-        MainHolder = new Holder(unitOfWork, getDriver(), getUrl(), getUser(), getPassword(), getSrc(), getPackage(), getSequence());
-        
+        MainHolder = new Holder(unitOfWork, "", getUrl(), "", "", getSrc(), getPackage(), getSequence(), getSource());
+
         try {
             String file = readFileAsString(getSqlFile());
             Pattern tableRegex = Pattern.compile("CREATE TABLE (\\w+) \\(([^;]+)\\);", Pattern.DOTALL | Pattern.MULTILINE);
@@ -111,7 +94,7 @@ public class NQLINQTask extends Task {
                 String[] contents = m.group(2).replace("Id INT NOT NULL PRIMARY KEY, ", "").split(", (?!\\d+)");
 
                 MainHolder.add(table, contents);
-                
+
                 System.out.println(MessageFormat.format("Table: {0}", table));
                 String singular = WordHelper.singularize(table);
                 String plural = WordHelper.pluralize(table);
@@ -123,7 +106,7 @@ public class NQLINQTask extends Task {
                         MainHolder.addField(table, new DbField(contents[i]));
                     else {
                         KeyField field = new KeyField(contents[i]);
-                        
+
                         MainHolder.addKeyField(table, field);
 
                         MainHolder.addExternalKeyField(field.getTable(), plural);
@@ -152,7 +135,7 @@ public class NQLINQTask extends Task {
         }
 
         reader.close();
-        
+
         return fileData.toString();
     }
 

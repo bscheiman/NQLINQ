@@ -1,34 +1,33 @@
 package org.nqlinq.core;
 
-import org.nqlinq.commands.CountCommand;
-
+import org.nqlinq.commands.SelectDistinctCommand;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings({ "UnusedDeclaration" })
-public class Count {
-    private int value;
+public class Distinct{
 
-    public int getValue() {
+    private List<String> value;
+
+    public List<String> getValue() {
         return value;
     }
 
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public Count(UnitOfWork uow, CountCommand cnt) {
+    public Distinct(UnitOfWork uow, SelectDistinctCommand dis) {
         uow.open();
 
         try {
-            String sql = cnt.getSql();
+            value = new ArrayList<String>();
+            String sql = dis.getSql();
             uow.logger.debug(sql);
-
             Statement stmt = uow.Conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
-            rs.next();
-            setValue(Integer.parseInt(rs.getString(1)));
+            while(rs.next()){
+                value.add(rs.getString(1));
+            }
 
             rs.close();
             stmt.close();

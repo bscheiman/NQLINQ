@@ -54,7 +54,6 @@ public class Queryable<T extends Entity> implements Iterable<T> {
         } catch (Exception ex) {
             uow.logger.fatal("Stacktrace:", ex);
         }
-
         uow.close();
     }
 

@@ -1,5 +1,6 @@
 package org.nqlinq.ant;
 
+import org.nqlinq.helpers.StringHelper;
 import org.nqlinq.helpers.WordHelper;
 
 import java.io.File;
@@ -15,6 +16,7 @@ public class Holder {
     public final HashMap<String, ArrayList<DbField>> TableFields;
     public final HashMap<String, ArrayList<KeyField>> TableKeyFields;
     public final HashMap<String, ArrayList<String>> IncomingKeyFields;
+    public final String DataSource;
     public final String Source;
     public final String Package;
     public final String Sequence;
@@ -23,13 +25,14 @@ public class Holder {
     public final String User;
     public final String Password;
 
-    public Holder(String unitOfWork, String driver, String url, String user, String password, String source, String pkg, String seq) {
+    public Holder(String unitOfWork, String driver, String url, String user, String password, String source, String pkg, String seq, String dataSource) {
         UnitOfWork = unitOfWork;
         Driver = driver;
         Url = url;
         User = user;
         Password = password;
         Source = source;
+        DataSource = dataSource;
         Package = pkg;
         Sequence = seq;
 
@@ -95,7 +98,10 @@ public class Holder {
         UnitOfWorkStream.println("import org.nqlinq.exceptions.*;");
         UnitOfWorkStream.println();
         UnitOfWorkStream.println("@SuppressWarnings(\"ALL\")");
-        UnitOfWorkStream.println(MessageFormat.format("@JdbcConnection(driver = \"{0}\", url = \"{1}\", user = \"{2}\", password = \"{3}\")", Driver, Url, User, Password));
+        if (!StringHelper.isNullOrEmpty(User))
+            UnitOfWorkStream.println(MessageFormat.format("@JdbcConnection(driver = \"{0}\", url = \"{1}\", user = \"{2}\", password = \"{3}\")", Driver, Url, User, Password));
+        else
+            UnitOfWorkStream.println(MessageFormat.format("@JndiConnection(url = \"{0}\", source = \"{1}\")", Url, DataSource));
         UnitOfWorkStream.println(MessageFormat.format("public class {0} extends UnitOfWork '{'", UnitOfWork));
         UnitOfWorkStream.println(MessageFormat.format("    public {0}() '{'", UnitOfWork));
         UnitOfWorkStream.println("        super();");
@@ -107,6 +113,8 @@ public class Holder {
                 String singular = WordHelper.singularize(table);
                 String plural = WordHelper.pluralize(table);
                 PrintStream whereStream = GetStream(GetPath(MessageFormat.format("where{0}Where", File.separator), singular));
+                PrintStream orderByStream = GetStream(GetPath(MessageFormat.format("orderBy{0}OrderBy", File.separator), singular));
+                PrintStream orderByDescStream = GetStream(GetPath(MessageFormat.format("orderByDesc{0}OrderByDesc", File.separator), singular));
 
                 UnitOfWorkStream.println(MessageFormat.format("    @TableObject(name = \"{0}.{1}\")", Package, singular));
                 UnitOfWorkStream.println("    @SuppressWarnings(\"unchecked\")");
@@ -121,7 +129,7 @@ public class Holder {
                 UnitOfWorkStream.println("        return q;");
                 UnitOfWorkStream.println("    }");
                 UnitOfWorkStream.println();
-                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> {1}() '{' return {1}(\"1 = 1 ORDER BY ID\"); '}'", singular, plural));
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> {1}() '{' return {1}(\"1 = 1\"); '}'", singular, plural));
                 UnitOfWorkStream.println();
                 UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> {1}(OperationBuilder oper) throws InvalidOperationException '{' return {1}(oper.getOperation()); '}'", singular, plural));
                 UnitOfWorkStream.println();
@@ -129,10 +137,36 @@ public class Holder {
                 UnitOfWorkStream.println();
                 UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> {1}(Operation oper) '{' return {1}(oper.toString()); '}'", singular, plural));
                 UnitOfWorkStream.println();
+
+
+                //TODO: Fix or remove
+                /*UnitOfWorkStream.println(MessageFormat.format("    @TableObject(name = \"{0}.{1}\")", Package, singular));
+                UnitOfWorkStream.println("    @SuppressWarnings(\"unchecked\")");
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> Distinct{1}(String str, String col) '{'", singular, plural));
+                UnitOfWorkStream.println(MessageFormat.format("        TableAnnotationHolder holder = AnnotationHelper.GetTableAnnotations(this.getClass(), \"{0}\");", plural));
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("        Queryable<{0}> q = new Queryable<{0}>(this, holder.getTableObject().name(), new SelectDistinctCommand(holder.getTable().name(), col, new Where(str)));", singular, plural));
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("        for ({0} obj: q)", singular));
+                UnitOfWorkStream.println("            add(obj);");
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println("        return q;");
+                UnitOfWorkStream.println("    }");
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> Distinct{1}(String col) '{' return Distinct{1}(\"1 = 1 ORDER BY ID\", col); '}'", singular, plural));
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> Distinct{1}(OperationBuilder oper, String col) throws InvalidOperationException '{' return Distinct{1}(oper.getOperation(), col); '}'", singular, plural));
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> Distinct{1}(DualOperation oper, String col) '{' return Distinct{1}(oper.toString(), col); '}'", singular, plural));
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> Distinct{1}(Operation oper, String col) '{' return Distinct{1}(oper.toString(), col); '}'", singular, plural));
+                UnitOfWorkStream.println();*/
+
+
                 UnitOfWorkStream.println(MessageFormat.format("    @TableObject(name = \"{0}.{1}\")", Package, singular));
                 UnitOfWorkStream.println("    @SuppressWarnings(\"unchecked\")");
-                UnitOfWorkStream.println(MessageFormat.format("    public {0} Single{0}(int id) throws InvalidOperationException '{'", singular));
-                UnitOfWorkStream.println(MessageFormat.format("        TableAnnotationHolder holder = AnnotationHelper.GetTableAnnotations(this.getClass(), \"Single{0}\", Integer.TYPE);", singular));
+                UnitOfWorkStream.println(MessageFormat.format("    public {0} Single{0}(long id) throws InvalidOperationException '{'", singular));
+                UnitOfWorkStream.println(MessageFormat.format("        TableAnnotationHolder holder = AnnotationHelper.GetTableAnnotations(this.getClass(), \"Single{0}\", Long.TYPE);", singular));
                 UnitOfWorkStream.println();
                 UnitOfWorkStream.println(MessageFormat.format("        Single<{0}> single = new Single<{0}>(this, holder.getTable().name(), holder.getTableObject().name(), id);", singular));
                 UnitOfWorkStream.println();
@@ -170,12 +204,36 @@ public class Holder {
                 UnitOfWorkStream.println();
                 PrintStream objStream = GetStream(GetPath(singular));
 
+                if (!new File(GetPath(MessageFormat.format("base{0}Base{1}", File.separator, singular))).exists()) {
+                    PrintStream baseObjStream = GetStream(GetPath(MessageFormat.format("base{0}Base{1}", File.separator, singular)));
+                    baseObjStream.println(MessageFormat.format("package {0}.base;", Package));
+                    baseObjStream.println();
+                    baseObjStream.println("import org.nqlinq.core.*;");
+                    baseObjStream.println();
+                    baseObjStream.println(MessageFormat.format("public class Base{0} extends Entity<Base{0}> '{'", singular));
+                    baseObjStream.println();
+                    baseObjStream.println("    protected long SerializedId;");
+                    baseObjStream.println();
+                    baseObjStream.println("    public long getSerializedId() {");
+                    baseObjStream.println("        SerializedId = Id;");
+                    baseObjStream.println("        return SerializedId;");
+                    baseObjStream.println("    }");
+                    baseObjStream.println();
+                    baseObjStream.println("    public void setSerializedId(long value) {");
+                    baseObjStream.println("        SerializedId = value;");
+                    baseObjStream.println("    }");
+                    baseObjStream.println();
+                    baseObjStream.println("}");
+                    baseObjStream.close();
+                }
+
                 objStream.println(MessageFormat.format("package {0};", Package));
                 objStream.println();
                 objStream.println("import org.nqlinq.annotations.*;");
                 objStream.println("import org.nqlinq.core.*;");
                 objStream.println("import org.nqlinq.exceptions.*;");
                 objStream.println(MessageFormat.format("import {0}.where.*;", Package));
+                objStream.println(MessageFormat.format("import {0}.base.*;", Package));
                 objStream.println("import org.nqlinq.helpers.ConversionHelper;");
                 objStream.println("import java.sql.Timestamp;");
                 objStream.println("import java.math.BigDecimal;");
@@ -183,24 +241,47 @@ public class Holder {
                 objStream.println("@SuppressWarnings(\"ALL\")");
                 objStream.println(MessageFormat.format("@Sequence(name = \"{0}\")", Sequence));
                 objStream.println(MessageFormat.format("@Table(name = \"{0}\")", table));
-                objStream.println(MessageFormat.format("public class {0} extends Entity<{0}> '{'", singular));
+                objStream.println(MessageFormat.format("public class {0} extends Base{0} '{'", singular));
 
                 whereStream.println(MessageFormat.format("package {0}.where;", Package));
                 whereStream.println();
                 whereStream.println(MessageFormat.format("public class Where{0} '{'", singular));
 
+                orderByStream.println(MessageFormat.format("package {0}.orderBy;", Package));
+                orderByStream.println();
+                orderByStream.println("import org.nqlinq.constraints.OrderBy;");
+                orderByStream.println(MessageFormat.format("public class OrderBy{0} '{'", singular));
+
+                orderByDescStream.println(MessageFormat.format("package {0}.orderByDesc;", Package));
+                orderByDescStream.println();
+                orderByDescStream.println("import org.nqlinq.constraints.OrderByDesc;");
+                orderByDescStream.println(MessageFormat.format("public class OrderByDesc{0} '{'", singular));
+
                 for (DbField field : TableFields.get(table)) {
                     whereStream.println(MessageFormat.format("    public static {0}.where.{1}.{2} {2};", Package, singular.toLowerCase(), field.getField()));
+                    orderByStream.println(MessageFormat.format("    public static String {0} = new OrderBy(\"{0}\").toString();", field.getField()));
+                    orderByDescStream.println(MessageFormat.format("    public static String {0} = new OrderByDesc(\"{0}\").toString();", field.getField()));
+
+                    objStream.println(MessageFormat.format("    public static final String {0}_ASC = \"ORDER BY {0} ASC\";", field.getField().toUpperCase()));
+                    objStream.println(MessageFormat.format("    public static final String {0}_DESC = \"ORDER BY {0} DESC\";", field.getField().toUpperCase()));
+                    //objStream.println(MessageFormat.format("    public static final String {0} = \"{0}\";", field.getField().toUpperCase()));
 
                     if (!field.getField().toUpperCase().equals("ID")) {
-                        objStream.println(MessageFormat.format("    protected {0} {1};", field.getMappedType(), field.getField().toLowerCase()));
+                        objStream.println(MessageFormat.format("    protected {0} {1};", field.getMappedType(), field.getField()));
                         objStream.println();
                         objStream.println(MessageFormat.format("    @Column(name = \"{0}\")", field.getField().toUpperCase()));
-                        objStream.println(MessageFormat.format("    public {0} get{1}() '{' return {2}; '}'", field.getMappedType(), field.getField(), field.getField().toLowerCase()));
+                        objStream.println(MessageFormat.format("    public {0} get{1}() '{' return {1}; '}'", field.getMappedType(), field.getField()));
                         objStream.println();
                         objStream.println(MessageFormat.format("    @Column(name = \"{0}\")", field.getField().toUpperCase()));
-                        objStream.println(MessageFormat.format("    public {0} set{1}(String newVal) '{'", singular, field.getField()));
-                        objStream.println(MessageFormat.format("        {0} = ConversionHelper.ConvertTo{1}(newVal);", field.getField().toLowerCase(), title(field.getMappedType())));
+                        objStream.println(MessageFormat.format("    public void set{0}(String newVal) '{'", field.getField()));
+                        objStream.println(MessageFormat.format("        {0} = ConversionHelper.ConvertTo{1}(newVal);", field.getField(), title(field.getMappedType())));
+                        objStream.println("        isDirty = true;");
+                        objStream.println("    }");
+                        objStream.println();
+
+                        objStream.println(MessageFormat.format("    @Column(name = \"{0}\")", field.getField().toUpperCase()));
+                        objStream.println(MessageFormat.format("    public {0} setChained{1}(String newVal) '{'", singular, field.getField()));
+                        objStream.println(MessageFormat.format("        {0} = ConversionHelper.ConvertTo{1}(newVal);", field.getField(), title(field.getMappedType())));
                         objStream.println("        isDirty = true;");
                         objStream.println();
                         objStream.println("        return this;");
@@ -209,8 +290,15 @@ public class Holder {
 
                         if (!field.getMappedType().equals("String")) {
                             objStream.println(MessageFormat.format("    @Column(name = \"{0}\")", field.getField().toUpperCase()));
-                            objStream.println(MessageFormat.format("    public {0} set{1}({2} newVal) '{'", singular, field.getField(), field.getMappedType()));
-                            objStream.println(MessageFormat.format("        {0} = newVal;", field.getField().toLowerCase()));
+                            objStream.println(MessageFormat.format("    public void set{0}({1} newVal) '{'", field.getField(), field.getMappedType()));
+                            objStream.println(MessageFormat.format("        {0} = newVal;", field.getField()));
+                            objStream.println("        isDirty = true;");
+                            objStream.println("    }");
+                            objStream.println();
+
+                            objStream.println(MessageFormat.format("    @Column(name = \"{0}\")", field.getField().toUpperCase()));
+                            objStream.println(MessageFormat.format("    public {0} setChained{1}({2} newVal) '{'", singular, field.getField(), field.getMappedType()));
+                            objStream.println(MessageFormat.format("        {0} = newVal;", field.getField()));
                             objStream.println("        isDirty = true;");
                             objStream.println();
                             objStream.println("        return this;");
@@ -236,7 +324,7 @@ public class Holder {
                     whereFieldStream.println(MessageFormat.format("public class {0} '{'", field.getField()));
                     whereFieldStream.println(MessageFormat.format("    public static Operation Equals({0} obj) '{' return new Operation(\"{1}\", \"=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
                     whereFieldStream.println();
-                    whereFieldStream.println(MessageFormat.format("    public static Operation DoesNotEquals({0} obj) '{' return new Operation(\"{1}\", \"!=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
+                    whereFieldStream.println(MessageFormat.format("    public static Operation DoesNotEqual({0} obj) '{' return new Operation(\"{1}\", \"!=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
                     whereFieldStream.println();
                     whereFieldStream.println(MessageFormat.format("    public static Operation IsGreaterThan({0} obj) '{' return new Operation(\"{1}\", \">\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
                     whereFieldStream.println();
@@ -255,8 +343,15 @@ public class Holder {
                 }
 
                 if (TableKeyFields.get(table) != null) {
-                    for (KeyField field : TableKeyFields.get(table))
-                        objStream.println(MessageFormat.format("    public {0} get{0}() '{' try '{' return (({1}) unitOfWork).Single{0}({2}); '}' catch (InvalidOperationException e) '{' return null; '}' '}'", field.getTableObject(), UnitOfWork, field.getIdField().toLowerCase()));
+                    for (KeyField field : TableKeyFields.get(table)) {
+                        objStream.println(MessageFormat.format("    public {0} {0};", field.getTableObject()));
+                        objStream.println(MessageFormat.format("    public {0} get{0}() '{' ", field.getTableObject()));
+                        objStream.println("        try {");
+                        objStream.println(MessageFormat.format("            {0} = (({1}) unitOfWork).Single{0}({2});", field.getTableObject(), UnitOfWork, field.getIdField()));
+                        objStream.println(MessageFormat.format("            return {0};", field.getTableObject()));
+                        objStream.println("        } catch (InvalidOperationException e) { return null; }");
+                        objStream.println("    }");
+                    }
                 }
 
                 if (IncomingKeyFields.get(table) != null) {
@@ -264,7 +359,65 @@ public class Holder {
                         String singularField = WordHelper.singularize(field);
                         String pluralField = WordHelper.pluralize(field);
 
-                        objStream.println(MessageFormat.format("    public Queryable<{0}> get{1}() '{' return (({2}) unitOfWork).{1}(Where{0}.{3}Id.Equals(id)); '}'", singularField, pluralField, UnitOfWork, singular));
+                        objStream.println(MessageFormat.format("    public {0}[] {1};", singularField, pluralField));
+                        objStream.println(MessageFormat.format("    public Queryable<{0}> get{1}() '{' ", singularField, pluralField));
+                        objStream.println(MessageFormat.format("        Queryable<{0}> {4} = (({2}) unitOfWork).{1}(Where{0}.{3}Id.Equals(Id)); ", singularField, pluralField, UnitOfWork, singular, pluralField.toLowerCase()));
+                        objStream.println(MessageFormat.format("        {0} = {1}.toArray(); ", pluralField, pluralField.toLowerCase()));
+                        objStream.println(MessageFormat.format("        return {0}; ", pluralField.toLowerCase()));
+                        objStream.println("    }");
+
+                        //TODO: Fix or remove
+                        /*PrintStream joinedObjStream = GetStream(GetPath(MessageFormat.format("{0}Join{1}", singular, singularField)));
+                        joinedObjStream.println(MessageFormat.format("package {0};", Package));
+                        joinedObjStream.println();
+                        joinedObjStream.println("import org.nqlinq.annotations.*;");
+                        joinedObjStream.println("import org.nqlinq.core.*;");
+                        joinedObjStream.println("import org.nqlinq.exceptions.*;");
+                        joinedObjStream.println(MessageFormat.format("import {0}.where.*;", Package));
+                        joinedObjStream.println("import org.nqlinq.helpers.ConversionHelper;");
+                        joinedObjStream.println("import java.sql.Timestamp;");
+                        joinedObjStream.println("import java.math.BigDecimal;");
+                        joinedObjStream.println();
+                        joinedObjStream.println("@SuppressWarnings(\"ALL\")");
+                        joinedObjStream.println(MessageFormat.format("@Sequence(name = \"{0}\")", Sequence));
+                        joinedObjStream.println(MessageFormat.format("@Table(name = \"{0}\")", table));
+                        joinedObjStream.println(MessageFormat.format("public class {0}Join{1} extends JoinedEntity<{0}> '{'", singular, singularField));
+                        joinedObjStream.println(MessageFormat.format("    public {0} {1};", singularField, singularField.toLowerCase()));
+                        joinedObjStream.println("}");
+                        joinedObjStream.close();
+
+                        UnitOfWorkStream.println("    @SuppressWarnings(\"unchecked\")");
+                        UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}Join{2}> {1}Join{3}(String equiv, String str) '{'", singular, plural, singularField, pluralField));
+                        UnitOfWorkStream.println(MessageFormat.format("        TableAnnotationHolder firstHolder = AnnotationHelper.GetTableAnnotations(this.getClass(), \"{0}\");", plural));
+                        UnitOfWorkStream.println(MessageFormat.format("        TableAnnotationHolder secondHolder = AnnotationHelper.GetTableAnnotations(this.getClass(), \"{0}\");", pluralField));
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println(MessageFormat.format("        Queryable<{0}Join{1}> q = new Queryable<{0}Join{1}>(this, \"{0}Join{1}\", new JoinCommand(firstHolder.getTable().name(), " +
+                                "secondHolder.getTable().name(), equiv, new Where(str)));", singular, singularField));
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println(MessageFormat.format("        for ({0}Join{1} obj: q)", singular, singularField));
+                        UnitOfWorkStream.println("            add(obj);");
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println("        return q;");
+                        UnitOfWorkStream.println("    }");
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}Join{2}> {1}Join{3}() '{' return {1}Join{3}(Operation.EQUALS, \"1 = 1\"); '}'", singular, plural, singularField, pluralField));
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}Join{2}> {1}Join{3}(OperationBuilder oper) throws InvalidOperationException '{' return {1}Join{3}(Operation.EQUALS, oper.getOperation()); '}'", singular, plural, singularField, pluralField));
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}Join{2}> {1}Join{3}(DualOperation oper) '{' return {1}Join{3}(Operation.EQUALS, oper.toString()); '}'", singular, plural, singularField, pluralField));
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}Join{2}> {1}Join{3}(Operation oper) '{' return {1}Join{3}(Operation.EQUALS, oper.toString()); '}'", singular, plural, singularField, pluralField));
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}Join{2}> {1}Join{3}(String equivalency) '{' return {1}Join{3}(equivalency, \"1 = 1\"); '}'", singular, plural, singularField, pluralField));
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}Join{2}> {1}Join{3}(String equivalency, OperationBuilder oper) throws InvalidOperationException '{' return {1}Join{3}(equivalency, oper.getOperation()); '}'", singular, plural, singularField, pluralField));
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}Join{2}> {1}Join{3}(String equivalency, DualOperation oper) '{' return {1}Join{3}(equivalency, oper.toString()); '}'", singular, plural, singularField, pluralField));
+                        UnitOfWorkStream.println();
+                        UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}Join{2}> {1}Join{3}(String equivalency, Operation oper) '{' return {1}Join{3}(equivalency, oper.toString()); '}'", singular, plural, singularField, pluralField));
+                        UnitOfWorkStream.println();*/
+
+
                     }
                 }
 
@@ -274,14 +427,17 @@ public class Holder {
                 objStream.println(MessageFormat.format("    public {0}({0} obj) '{'", singular));
 
                 for (DbField field : TableFields.get(table)) {
-                    objStream.println(MessageFormat.format("        {0} = obj.{0};", field.getField().toLowerCase()));
+                    objStream.println(MessageFormat.format("        {0} = obj.{0};", field.getField()));
                 }
                 objStream.println("    }");
-
                 objStream.println("}");
                 whereStream.println("}");
+                orderByStream.println("}");
+                orderByDescStream.println("}");
                 objStream.close();
                 whereStream.close();
+                orderByStream.close();
+                orderByDescStream.close();
             }
         } finally {
             UnitOfWorkStream.println("}");

@@ -30,7 +30,6 @@ public class NQLINQConnection {
     }
 
     public void close() {
-        
     }
 
     public PreparedStatement prepareStatement(String sql) throws SQLException {

@@ -1,5 +1,7 @@
 package org.nqlinq.core;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 import org.nqlinq.commands.SelectCommand;
 import org.nqlinq.constraints.Where;
 import org.nqlinq.exceptions.InvalidOperationException;
@@ -14,15 +16,25 @@ import java.util.HashMap;
 public class Single<T extends Entity> {
     private T object;
     private static HashMap<String, Class> ReflectionCache = new HashMap<String, Class>();
+    Cache cache;
 
     @SuppressWarnings("unchecked")
     public Single(UnitOfWork uow, String table, String obj, long id) throws InvalidOperationException {
-        uow.open();
         boolean found = false;
 
         try {
             if (!ReflectionCache.containsKey(obj))
                 ReflectionCache.put(obj, Class.forName(obj));
+
+            if (!uow.cacheManager.cacheExists(obj))
+                uow.cacheManager.addCache(new Cache(obj, 10000, false, false, 600, 600));
+            cache = uow.cacheManager.getCache(obj);
+            if (cache.get(id) != null) {
+                object = (T)cache.get(id).getObjectValue();
+                found = true;
+                return;
+            }
+            uow.open();
 
             Statement stmt = uow.Conn.createStatement();
 
@@ -37,6 +49,8 @@ public class Single<T extends Entity> {
                     cls.Parse(uow, rs);
 
                     object = cls;
+
+                    cache.put(new Element(cls.getId(), cls));
 
                     found = true;
                     break;
@@ -64,12 +78,21 @@ public class Single<T extends Entity> {
 
     @SuppressWarnings("unchecked")
     public Single(UnitOfWork uow, String table, String obj, int id) throws InvalidOperationException {
-        uow.open();
         boolean found = false;
 
         try {
             if (!ReflectionCache.containsKey(obj))
                 ReflectionCache.put(obj, Class.forName(obj));
+
+            if (!uow.cacheManager.cacheExists(obj))
+                uow.cacheManager.addCache(new Cache(obj, 10000, false, false, 600, 600));
+            cache = uow.cacheManager.getCache(obj);
+            if (cache.get(id) != null) {
+                object = (T)cache.get(id).getObjectValue();
+                found = true;
+                return;
+            }
+            uow.open();
 
             Statement stmt = uow.Conn.createStatement();
 
@@ -84,6 +107,8 @@ public class Single<T extends Entity> {
                     cls.Parse(uow, rs);
 
                     object = cls;
+
+                    cache.put(new Element(cls.getId(), cls));
 
                     found = true;
                     break;

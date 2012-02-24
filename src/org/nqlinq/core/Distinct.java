@@ -8,7 +8,7 @@ import java.util.List;
 
 @SuppressWarnings({ "UnusedDeclaration" })
 public class Distinct{
-
+    //TODO: This is still a work in progress, feel free to try and implement it, it's not as easy as it sounds though
     private List<String> value;
 
     public List<String> getValue() {

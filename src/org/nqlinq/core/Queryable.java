@@ -1,5 +1,7 @@
 package org.nqlinq.core;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 import org.nqlinq.commands.BaseCommand;
 import org.nqlinq.exceptions.InvalidOperationException;
 
@@ -16,6 +18,7 @@ public class Queryable<T extends Entity> implements Iterable<T> {
     protected ArrayList<T> list = new ArrayList<T>();
     private static HashMap<String, Class> ReflectionCache = new HashMap<String, Class>();
     protected String TStr;
+    Cache cache;
 
     @SuppressWarnings("unchecked")
     public Queryable(UnitOfWork uow, String obj, BaseCommand cmd) {
@@ -25,6 +28,9 @@ public class Queryable<T extends Entity> implements Iterable<T> {
         try {
             if (!ReflectionCache.containsKey(obj))
                 ReflectionCache.put(obj, Class.forName(obj));
+            if (!uow.cacheManager.cacheExists(obj))
+                uow.cacheManager.addCache(new Cache(obj, 10000, false, false, 600, 600));
+            cache = uow.cacheManager.getCache(obj);
 
             Statement stmt = uow.Conn.createStatement();
 
@@ -38,6 +44,7 @@ public class Queryable<T extends Entity> implements Iterable<T> {
 
                     cls.Parse(uow, rs);
 
+                    cache.put(new Element(cls.getId(), cls));
                     list.add(cls);
                 }
 

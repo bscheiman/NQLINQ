@@ -22,6 +22,8 @@ public class StringHelper {
     final static NumberFormat percentFormatter = NumberFormat.getPercentInstance(locale);
     final static SimpleDateFormat dateFormatter = new  SimpleDateFormat("dd/MM/yyyy");
     final static SimpleDateFormat dateTimeFormatter = new  SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+    final static SimpleDateFormat internalDateTimeFormatter = new  SimpleDateFormat("yyyy-MM-dd-HH-mm");
+    final static SimpleDateFormat internalDateFormatter = new  SimpleDateFormat("yyyy-MM-dd");
     private StringHelper() {
     }
 
@@ -87,12 +89,28 @@ public class StringHelper {
         return dateTimeFormatter.format(DateHelper.toInternalDateTime(dateTime));
     }
 
+    public static String internalDateTimeString(Date date) {
+        return internalDateTimeFormatter.format(date);
+    }
+
+    public static String internalDateTimeString(long dateTime) {
+        return internalDateTimeFormatter.format(DateHelper.toInternalDateTime(dateTime));
+    }
+
     public static String dateString(Date dateTime) {
         return dateFormatter.format(dateTime);
     }
 
     public static String dateString(long dateTime) {
         return dateFormatter.format(DateHelper.toInternalDateTime(dateTime));
+    }
+
+    public static String internalDateString(Date dateTime) {
+        return internalDateFormatter.format(dateTime);
+    }
+
+    public static String internalDateString(long dateTime) {
+        return internalDateFormatter.format(DateHelper.toInternalDateTime(dateTime));
     }
 
     public static String toCurrencyString(Number number){

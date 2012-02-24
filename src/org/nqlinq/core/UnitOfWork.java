@@ -1,5 +1,7 @@
 package org.nqlinq.core;
 
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.config.Configuration;
 import org.apache.log4j.Logger;
 import org.nqlinq.annotations.*;
 import org.nqlinq.helpers.*;
@@ -22,13 +24,18 @@ public class UnitOfWork {
     protected boolean logQueries = true;
     protected boolean isOpen = false;
     Context ctx = null;
-
+    Configuration config;
+    CacheManager cacheManager;
     private static DataSource ds = null;
 
     @SuppressWarnings("unchecked")
     public UnitOfWork() {
 
         Hashtable ht = new Hashtable();
+        config = new Configuration();
+        config.setName("Base");
+        config.setMonitoring("autodetect");
+        cacheManager = CacheManager.create(config);
         try {
             JndiConnection jndi = this.getClass().getAnnotation(JndiConnection.class);
             JdbcConnection jdbc = this.getClass().getAnnotation(JdbcConnection.class);
@@ -66,11 +73,9 @@ public class UnitOfWork {
     @SuppressWarnings("unchecked")
     public void open() {
         if (!isOpen) {
-            System.out.println("Opening Connection");
             Conn.open();
             isOpen = true;
-        } else
-            System.out.println("Connection already opened, using that");
+        }
     }
 
     public void releasePool() {
@@ -81,11 +86,9 @@ public class UnitOfWork {
     public void close() {
         try {
             if (isOpen) {
-                System.out.println("Closing Connection");
                 Conn.close();
                 isOpen = false;
-            } else
-                System.out.println("Connection already closed");
+            }
         }
         catch (Exception e) {
             // a failure occurred

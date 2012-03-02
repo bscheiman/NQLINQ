@@ -144,7 +144,9 @@ public class Entity<T> {
                 if (col == null)
                     continue;
                 if(method.getName().endsWith("Id") || method.getReturnType().getName().toLowerCase().endsWith("long")
-                        || method.getReturnType().getName().toLowerCase().endsWith("int"))
+                        || method.getReturnType().getName().toLowerCase().endsWith("int")
+                        || method.getReturnType().getName().toLowerCase().endsWith("float")
+                        || method.getReturnType().getName().toLowerCase().endsWith("double") )
                     values.add(MessageFormat.format("{0}", method.invoke(this)).replaceAll(",", ""));
                 else
                     values.add(MessageFormat.format("{0}", method.invoke(this)));

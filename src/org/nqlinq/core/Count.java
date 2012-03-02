@@ -22,7 +22,8 @@ public class Count {
 
         try {
             String sql = cnt.getSql();
-            uow.logger.debug(sql);
+            if(uow.logQueries)
+                UnitOfWork.logger.debug(sql);
 
             Statement stmt = uow.Conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -33,7 +34,7 @@ public class Count {
             rs.close();
             stmt.close();
         } catch (Exception ex) {
-            uow.logger.fatal("Stacktrace:", ex);
+            UnitOfWork.logger.fatal("Stacktrace:", ex);
         }
 
         uow.open();

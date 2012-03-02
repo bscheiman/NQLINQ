@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,6 +55,21 @@ public class StringHelper {
         }
 
         return builder.toString();
+    }
+
+    public static String join(Vector<String> s) {
+        int k = s.size();
+
+        if (k == 0)
+            return null;
+
+        StringBuilder out = new StringBuilder();
+        out.append(s.get(0));
+
+        for (int x = 1; x < k; ++x)
+            out.append(",").append(s.get(x));
+
+        return out.toString();
     }
 
     public static String[] splitByLength(String str) {

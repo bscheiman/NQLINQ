@@ -26,7 +26,6 @@ public class UnitOfWork {
     Context ctx = null;
     Configuration config;
     CacheManager cacheManager;
-    private static DataSource ds = null;
 
     @SuppressWarnings("unchecked")
     public UnitOfWork() {
@@ -44,6 +43,7 @@ public class UnitOfWork {
                 throw new Exception("No JNDI nor JDBC annotation found");
 
             if(StringHelper.isNullOrEmpty(jndi.url())){
+                assert jdbc != null;
                 Class c = Class.forName(jdbc.driver());
                 Driver driver = (Driver) c.newInstance();
                 DriverManager.registerDriver(driver);
@@ -54,7 +54,7 @@ public class UnitOfWork {
                     Pool.setCaching(false);
                 }
 
-                Conn.setConnection(Pool.getConnection());
+                NQLINQConnection.setConnection(Pool.getConnection());
             }
             else {
                 ht.put(Context.INITIAL_CONTEXT_FACTORY,
@@ -62,12 +62,13 @@ public class UnitOfWork {
                 ht.put(Context.PROVIDER_URL,
                         jndi.url());
                 ctx = new InitialContext(ht);
-                ds = (DataSource) ctx.lookup(jndi.source());
-                Conn.setConnection(ds.getConnection());
+                DataSource ds = (DataSource) ctx.lookup(jndi.source());
+                NQLINQConnection.setConnection(ds.getConnection());
             }
         } catch (Exception ex) {
             logger.fatal("Stacktrace:", ex);
         }
+        setLogger(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -109,8 +110,7 @@ public class UnitOfWork {
     }
 
     public void saveChanges(boolean log) {
-        if (!log)
-            logQueries = false;
+        setLogger(log);
         saveChanges();
     }
 
@@ -175,7 +175,8 @@ public class UnitOfWork {
             for (int i = 0; i < objects.length; i++)
                 stmt.setObject(i + 1, objects[i]);
 
-            logger.debug(sql);
+            if(logQueries)
+                logger.debug(sql);
             stmt.execute();
 
             stmt.close();
@@ -197,5 +198,9 @@ public class UnitOfWork {
         } catch (IllegalAccessException e) {
             return null;
         }
+    }
+    
+    public void setLogger(boolean log){
+        logQueries = log;
     }
 }

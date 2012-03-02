@@ -35,7 +35,8 @@ public class Queryable<T extends Entity> implements Iterable<T> {
             Statement stmt = uow.Conn.createStatement();
 
             String sql = cmd.getSql();
-            uow.logger.debug(sql);
+            if(uow.logQueries)
+                UnitOfWork.logger.debug(sql);
             ResultSet rs = stmt.executeQuery(sql);
 
             try {
@@ -48,7 +49,7 @@ public class Queryable<T extends Entity> implements Iterable<T> {
                     list.add(cls);
                 }
 
-            } catch (SQLException e) {
+            } catch (SQLException ignored) {
 
             } finally {
                 try {
@@ -59,7 +60,7 @@ public class Queryable<T extends Entity> implements Iterable<T> {
 
             stmt.close();
         } catch (Exception ex) {
-            uow.logger.fatal("Stacktrace:", ex);
+            UnitOfWork.logger.fatal("Stacktrace:", ex);
         }
         uow.close();
     }

@@ -1,6 +1,5 @@
 package org.nqlinq.core;
 
-import com.asn1c.core.Int32;
 import org.nqlinq.annotations.Column;
 import org.nqlinq.annotations.Sequence;
 import org.nqlinq.annotations.Table;
@@ -15,7 +14,7 @@ import java.util.HashMap;
 
 @SuppressWarnings({ "UnusedDeclaration" })
 public class Entity<T> {
-    protected int id;
+    protected long Id;
     protected boolean isDirty;
     protected static HashMap<String, HashMap<String, Method>> ReflectionInfo = new HashMap<String, HashMap<String, Method>>();
     protected static HashMap<String, String> UpdateQueries = new HashMap<String, String>();
@@ -36,58 +35,59 @@ public class Entity<T> {
                 Method[] methods = this.getClass().getMethods();
 
                 for (Method method : methods) {
-                    if (!method.getName().startsWith("set"))
+                    if (!method.getName().startsWith("set") || !method.getParameterTypes()[0].getName().endsWith("String"))
                         continue;
 
                     Column col = method.getAnnotation(Column.class);
 
-                    ReflectionInfo.get(className).put(col.name(), method);
+                    if(col != null)
+                        ReflectionInfo.get(className).put(col.name(), method);
                 }
-
-                Method method = this.getClass().getSuperclass().getDeclaredMethod("setId", String.class);
+                Class entityClass = this.getClass().getSuperclass().getSuperclass();
+                Method method = entityClass.getDeclaredMethod("setId", java.lang.String.class);
                 method.setAccessible(true);
 
                 Column col = method.getAnnotation(Column.class);
 
-                ReflectionInfo.get(className).put(col.name(), method);
+                if(col != null)
+                    ReflectionInfo.get(className).put(col.name(), method);
             }
-
-            try {
-                ResultSetMetaData metaData = rs.getMetaData();
-
-                for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    String column = metaData.getColumnName(i).toUpperCase();
-
-                    ReflectionInfo.get(className).get(column).invoke(this, rs.getString(i));
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-            isDirty = false;
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
+        try {
+            ResultSetMetaData metaData = rs.getMetaData();
+
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                String column = metaData.getColumnName(i).toUpperCase();
+                ReflectionInfo.get(className).get(column).invoke(this, rs.getString(i));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        isDirty = false;
     }
 
     public Entity() {
         setId("-1");
         isDirty = true;
+        generateQueries();
     }
 
     @Column(name = "ID")
-    public int getId() {
-        return id;
+    public long getId() {
+        return Id;
     }
 
     public void delete(UnitOfWork uow) {
         String className = this.getClass().getName();
 
-        if (id < 0)
+        if (Id < 0)
             return;
 
         Table table = this.getClass().getAnnotation(Table.class);
 
-        uow.ExecuteSql(DeleteQueries.get(className), new Object[] { id });
+        uow.ExecuteSql(DeleteQueries.get(className), new Object[] { Id });
     }
 
     public void generateQueries() {
@@ -107,7 +107,7 @@ public class Entity<T> {
         values.add(MessageFormat.format("{0}.nextval", seq.name()));
 
         for (Method method : methods) {
-            if (!method.getName().startsWith("get") || method.getName().endsWith("Id"))
+            if (!method.getName().startsWith("get") || method.getName().equals("getId"))
                 continue;
 
             Column col = method.getAnnotation(Column.class);
@@ -122,9 +122,10 @@ public class Entity<T> {
 
         InsertQueries.put(className, MessageFormat.format("INSERT INTO {0}({1}) VALUES({2})", table.name(), StringHelper.join(columns), StringHelper.join(values)));
         UpdateQueries.put(className, MessageFormat.format("UPDATE {0} SET {1} WHERE ID = ?", table.name(), StringHelper.join(updates)));
-        DeleteQueries.put(className, MessageFormat.format("DELETE FROM {0} WHERE ID = ''?''", table.name()));
+        DeleteQueries.put(className, MessageFormat.format("DELETE FROM {0} WHERE ID = ?", table.name()));
     }
 
+    @SuppressWarnings("unchecked")
     public void save(UnitOfWork uow) {
         String className = this.getClass().getName();
 
@@ -132,40 +133,31 @@ public class Entity<T> {
             return;
 
         try {
-            HashMap<String, String> keyValue = new HashMap<String, String>();
-
+            ArrayList values = new ArrayList<String>();
             Method[] methods = this.getClass().getMethods();
-
             for (Method method : methods) {
-                if (!method.getName().startsWith("get") || method.getName().endsWith("Id"))
+                if (!method.getName().startsWith("get") || method.getName().equals("getId"))
                     continue;
 
                 Column col = method.getAnnotation(Column.class);
 
                 if (col == null)
                     continue;
-
-                keyValue.put(col.name(), MessageFormat.format("{0}", method.invoke(this)));
+                if(method.getName().endsWith("Id") || method.getReturnType().getName().toLowerCase().endsWith("long")
+                        || method.getReturnType().getName().toLowerCase().endsWith("int")
+                        || method.getReturnType().getName().toLowerCase().endsWith("float")
+                        || method.getReturnType().getName().toLowerCase().endsWith("double") )
+                    values.add(MessageFormat.format("{0}", method.invoke(this)).replaceAll(",", ""));
+                else
+                    values.add(MessageFormat.format("{0}", method.invoke(this)));
             }
 
-            if (id < 0) {
+            if (Id < 0) {
                 Sequence seq = this.getClass().getAnnotation(Sequence.class);
-                Object[] objects = new Object[keyValue.keySet().size()];
-                int currObj = 0;
-
-                for (String val : keyValue.values())
-                    objects[currObj++] = val;
-
-                setId(uow.ExecuteInsert(InsertQueries.get(className), seq.name(), objects));
+                setId(uow.ExecuteInsert(InsertQueries.get(className), seq.name(), values.toArray()));
             } else {
-                Object[] objects = new Object[keyValue.keySet().size() + 1];
-                objects[objects.length - 1] = id;
-                int currObj = 0;
-
-                for (String val : keyValue.values())
-                    objects[currObj++] = val;
-
-                uow.ExecuteSql(UpdateQueries.get(className), objects);
+                values.add(MessageFormat.format("{0}", Id).replaceAll(",", ""));
+                uow.ExecuteSql(UpdateQueries.get(className), values.toArray());
             }
 
             isDirty = false;
@@ -176,7 +168,7 @@ public class Entity<T> {
 
     @Column(name = "ID")
     protected Entity setId(String value) {
-        id = Int32.parseInt(value);
+        Id = Long.parseLong(value);
 
         return this;
     }

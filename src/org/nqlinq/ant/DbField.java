@@ -67,7 +67,7 @@ public class DbField {
         if (getType().equals("NUMBER") && getLength() == 1)
             return "boolean";
 
-        if (getType().equals("NUMBER") || getType().equals("INT") || getType().equals("TINYINT") || getType().equals("SMALLINT"))
+        if ((getType().equals("NUMBER") && getLength() < 15) || getType().equals("INT") || getType().equals("TINYINT") || getType().equals("SMALLINT"))
             return "int";
 
         if (getType().equals("TIMESTAMP"))
@@ -79,14 +79,11 @@ public class DbField {
         if (getType().equals("DECIMAL"))
             return "double";
 
-        if (getType().equals("NUMERIC") || getType().equals("BIGINT"))
-            return "BigDecimal";
+        if (getType().equals("NUMBER") || getType().equals("NUMERIC") || getType().equals("BIGINT"))
+            return "long";
 
-        if (getType().equals("DECIMAL"))
-            return "double";
-
-        if (getType().equals("DECIMAL"))
-            return "double";
+        if (getType().equals("CLOB"))
+            return "long";
 
         return Type;
     }

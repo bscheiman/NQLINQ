@@ -1,6 +1,5 @@
 package org.nqlinq.core;
 
-import com.asn1c.core.Int32;
 import org.nqlinq.commands.CountCommand;
 
 import java.sql.ResultSet;
@@ -23,18 +22,19 @@ public class Count {
 
         try {
             String sql = cnt.getSql();
-            uow.logger.debug(sql);
+            if(uow.logQueries)
+                UnitOfWork.logger.debug(sql);
 
             Statement stmt = uow.Conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
             rs.next();
-            setValue(Int32.parseInt(rs.getString(1)));
+            setValue(Integer.parseInt(rs.getString(1)));
 
             rs.close();
             stmt.close();
         } catch (Exception ex) {
-            uow.logger.fatal("Stacktrace:", ex);
+            UnitOfWork.logger.fatal("Stacktrace:", ex);
         }
 
         uow.open();

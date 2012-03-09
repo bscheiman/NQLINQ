@@ -5,6 +5,14 @@ import org.nqlinq.helpers.StringHelper;
 import java.text.MessageFormat;
 
 public class Operation {
+    public static final String EQUALS = "=";
+    public static final String NOTEQUALS = "!=";
+    public static final String GREATER = ">";
+    public static final String LESSER = "<";
+    public static final String GREATEREQUAL = ">=";
+    public static final String LESSEREQUAL = "<=";
+    public static final String IN = "IN";
+
     private final String Column;
     private final String Operator;
     private final Object Target;
@@ -40,9 +48,21 @@ public class Operation {
 
     @Override
     public String toString() {
-        if (StringHelper.isNullOrEmpty(Order))
+        if (Operator.equals("IN"))
+            return MessageFormat.format("{0} {1} {2}", Column, Operator, ((String)Target).replaceAll(", ", "','").replaceAll("\\(", "('").replaceAll("\\)", "')"));
+        if (Operator.equals("LIKE"))
+            return MessageFormat.format("{0} {1} ''%{2}%''", Column, Operator, Target);
+        if (StringHelper.isNullOrEmpty(Order)) {
+            if(Target.getClass().getName().toLowerCase().endsWith("int") ||
+                    Target.getClass().getName().toLowerCase().endsWith("long"))
+                return MessageFormat.format("{0} {1} ''{2}''", Column, Operator, Target).replace(",", "");
             return MessageFormat.format("{0} {1} ''{2}''", Column, Operator, Target);
-        else
+        }
+        else{
+            if(Target.getClass().getName().toLowerCase().endsWith("int") ||
+                    Target.getClass().getName().toLowerCase().endsWith("long"))
+                return MessageFormat.format("{0} {1} ''{2}'' {3}", Column, Operator, Target, Order).replace(",", "");
             return MessageFormat.format("{0} {1} ''{2}'' {3}", Column, Operator, Target, Order);
+        }
     }
 }

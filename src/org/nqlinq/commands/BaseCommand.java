@@ -12,4 +12,8 @@ public abstract class BaseCommand {
     }
 
     public abstract String getSql();
+
+    public BaseConstraint[] getConstraints(){
+        return constraints;
+    }
 }

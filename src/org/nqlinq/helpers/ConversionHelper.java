@@ -44,6 +44,10 @@ public class ConversionHelper {
         return Double.parseDouble(str);
     }
 
+    public static long ConvertToLong(String str) {
+        return Long.parseLong(str);
+    }
+
     public static BigDecimal ConvertToBigdecimal(String str) {
         final DecimalFormatSymbols symbols;
         final char groupSeparatorChar;

@@ -1,13 +1,9 @@
 package org.nqlinq.helpers;
 
 import org.nqlinq.core.Entity;
-import org.nqlinq.core.Queryable;
 import sun.misc.BASE64Encoder;
-import sun.text.Normalizer;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -137,9 +133,22 @@ public class StringHelper {
         return percentFormatter.format(number);
     }
 
-    public static String removeAccents(String text) {
-        return Normalizer.decompose(text, false, 0)
-                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+    public static String removeAccents(String s) {
+        s = s.replaceAll("[èéêë]","e");
+        s = s.replaceAll("[ùúûü]","u");
+        s = s.replaceAll("[ìíîï]","i");
+        s = s.replaceAll("[àáâãäå]","a");
+        s = s.replaceAll("[òóôõö]","o");
+        s = s.replaceAll("ñ", "n");
+
+        s = s.replaceAll("[ÈÉÊË]","E");
+        s = s.replaceAll("[ÙÚÛÜ]","U");
+        s = s.replaceAll("[ÌÍÎÏ]","I");
+        s = s.replaceAll("[ÀÁÂÃÄÅ]","A");
+        s = s.replaceAll("[ÒÓÔÕÖ]","O");
+        s = s.replaceAll("Ñ", "N");
+
+        return s;
     }
 
     public static String toTitle(String str){

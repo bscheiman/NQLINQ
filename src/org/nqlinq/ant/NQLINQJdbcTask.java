@@ -98,7 +98,7 @@ public class NQLINQJdbcTask extends Task {
         System.out.println(MessageFormat.format("Processing file: {0}...", getSqlFile()));
         System.out.println(MessageFormat.format("Unit of Work: {0}", unitOfWork));
 
-        MainHolder = new Holder(unitOfWork, getDriver(), getUrl(), getUser(), getPassword(), getSrc(), getPackage(), getSequence(), "");
+        MainHolder = new Holder(unitOfWork, getDriver(), getUrl(), getUser(), getPassword(), getSrc(), getPackage(), getSequence(), "", "", "");
         
         try {
             String file = readFileAsString(getSqlFile());

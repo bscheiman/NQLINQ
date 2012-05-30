@@ -4,6 +4,7 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.Configuration;
 import org.apache.log4j.Logger;
 import org.nqlinq.annotations.*;
+import org.nqlinq.constants.IdentityStrings;
 import org.nqlinq.helpers.*;
 import snaq.db.ConnectionPool;
 
@@ -13,12 +14,13 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @SuppressWarnings({ "UnusedDeclaration" })
 public class UnitOfWork {
     protected static final Logger logger = LoggerHelper.getLogger();
-    protected static Vector<Entity> entities = new Vector<Entity>();
-    protected static Vector<Entity> removedEntities = new Vector<Entity>();
+    protected static CopyOnWriteArrayList<Entity> entities = new CopyOnWriteArrayList<Entity>();
+    protected static CopyOnWriteArrayList<Entity> removedEntities = new CopyOnWriteArrayList<Entity>();
     protected NQLINQConnection Conn = new NQLINQConnection();
     protected static ConnectionPool Pool = null;
     protected boolean logQueries = true;
@@ -26,6 +28,7 @@ public class UnitOfWork {
     Context ctx = null;
     Configuration config;
     CacheManager cacheManager;
+    String dbms;
 
     @SuppressWarnings("unchecked")
     public UnitOfWork() {
@@ -38,9 +41,14 @@ public class UnitOfWork {
         try {
             JndiConnection jndi = this.getClass().getAnnotation(JndiConnection.class);
             JdbcConnection jdbc = this.getClass().getAnnotation(JdbcConnection.class);
+            ContextFactoryName ctxName = this.getClass().getAnnotation(ContextFactoryName.class);
+            DBMS dbmsName = this.getClass().getAnnotation(DBMS.class);
 
             if (jdbc == null && jndi == null)
                 throw new Exception("No JNDI nor JDBC annotation found");
+            
+            dbms = dbmsName == null || StringHelper.isNullOrEmpty(dbmsName.name()) ||
+                    dbmsName.name().equals("null") ? "" : dbmsName.name();
 
             if(StringHelper.isNullOrEmpty(jndi.url())){
                 assert jdbc != null;
@@ -57,10 +65,11 @@ public class UnitOfWork {
                 NQLINQConnection.setConnection(Pool.getConnection());
             }
             else {
-                ht.put(Context.INITIAL_CONTEXT_FACTORY,
-                        "weblogic.jndi.WLInitialContextFactory");
-                ht.put(Context.PROVIDER_URL,
-                        jndi.url());
+                if (ctxName == null)
+                    ht.put(Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory");
+                else
+                    ht.put(Context.INITIAL_CONTEXT_FACTORY, ctxName.FQDN());
+                ht.put(Context.PROVIDER_URL, jndi.url());
                 ctx = new InitialContext(ht);
                 DataSource ds = (DataSource) ctx.lookup(jndi.source());
                 NQLINQConnection.setConnection(ds.getConnection());
@@ -154,13 +163,23 @@ public class UnitOfWork {
         }
 
         try {
-            Statement stmt = Conn.createStatement();
-            ResultSet rs = stmt.executeQuery(MessageFormat.format("SELECT {0}.currval FROM DUAL", sequence));
-            rs.next();
-            retVal = rs.getString(1);
+            if (StringHelper.isNullOrEmpty(dbms) || dbms.equals("Oracle")) {
+                Statement stmt = Conn.createStatement();
+                ResultSet rs = stmt.executeQuery(MessageFormat.format(IdentityStrings.oracleIdentityCurrVal, sequence));
+                rs.next();
+                retVal = rs.getString(1);
+    
+                rs.close();
+                stmt.close(); 
+            } else if(dbms.equals("Postgres")){
+                Statement stmt = Conn.createStatement();
+                ResultSet rs = stmt.executeQuery(MessageFormat.format(IdentityStrings.postgresIdentityCurrVal, sequence));
+                rs.next();
+                retVal = rs.getString(1);
 
-            rs.close();
-            stmt.close();
+                rs.close();
+                stmt.close();
+            }
         } catch (Exception ex) {
             logger.fatal("Stacktrace:", ex);
         }
@@ -202,5 +221,9 @@ public class UnitOfWork {
     
     public void setLogger(boolean log){
         logQueries = log;
+    }
+    
+    public String getDbms(){
+        return dbms;
     }
 }

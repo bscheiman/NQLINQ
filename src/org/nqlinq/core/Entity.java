@@ -3,6 +3,7 @@ package org.nqlinq.core;
 import org.nqlinq.annotations.Column;
 import org.nqlinq.annotations.Sequence;
 import org.nqlinq.annotations.Table;
+import org.nqlinq.constants.IdentityStrings;
 import org.nqlinq.helpers.StringHelper;
 
 import java.lang.reflect.Method;
@@ -23,9 +24,8 @@ public class Entity<T> {
     protected UnitOfWork unitOfWork;
 
     public void Parse(UnitOfWork uow, ResultSet rs) {
-        String className = this.getClass().getName();
-        generateQueries();
         unitOfWork = uow;
+        String className = this.getClass().getName();
 
         try {
             if (!ReflectionInfo.containsKey(className))
@@ -71,7 +71,6 @@ public class Entity<T> {
     public Entity() {
         setId("-1");
         isDirty = true;
-        generateQueries();
     }
 
     @Column(name = "ID")
@@ -80,6 +79,8 @@ public class Entity<T> {
     }
 
     public void delete(UnitOfWork uow) {
+        unitOfWork = uow;
+        generateQueries();
         String className = this.getClass().getName();
 
         if (Id < 0)
@@ -87,7 +88,7 @@ public class Entity<T> {
 
         Table table = this.getClass().getAnnotation(Table.class);
 
-        uow.ExecuteSql(DeleteQueries.get(className), new Object[] { Id });
+        unitOfWork.ExecuteSql(DeleteQueries.get(className), new Object[] { Id });
     }
 
     public void generateQueries() {
@@ -103,8 +104,13 @@ public class Entity<T> {
         Sequence seq = this.getClass().getAnnotation(Sequence.class);
         Table table = this.getClass().getAnnotation(Table.class);
 
-        columns.add("ID");
-        values.add(MessageFormat.format("{0}.nextval", seq.name()));
+        if (StringHelper.isNullOrEmpty(unitOfWork.dbms) || unitOfWork.dbms.equals("Oracle")) {
+            columns.add("ID");
+            values.add(MessageFormat.format(IdentityStrings.oracleIdentityNextVal, seq.name()));
+        } else if(unitOfWork.dbms.equals("Postgres")){
+            columns.add("ID");
+            values.add(MessageFormat.format(IdentityStrings.postgresIdentityNextVal, seq.name()));
+        }
 
         for (Method method : methods) {
             if (!method.getName().startsWith("get") || method.getName().equals("getId"))
@@ -127,6 +133,8 @@ public class Entity<T> {
 
     @SuppressWarnings("unchecked")
     public void save(UnitOfWork uow) {
+        unitOfWork = uow;
+        generateQueries();
         String className = this.getClass().getName();
 
         if (!isDirty)
@@ -154,10 +162,10 @@ public class Entity<T> {
 
             if (Id < 0) {
                 Sequence seq = this.getClass().getAnnotation(Sequence.class);
-                setId(uow.ExecuteInsert(InsertQueries.get(className), seq.name(), values.toArray()));
+                setId(unitOfWork.ExecuteInsert(InsertQueries.get(className), seq.name(), values.toArray()));
             } else {
                 values.add(MessageFormat.format("{0}", Id).replaceAll(",", ""));
-                uow.ExecuteSql(UpdateQueries.get(className), values.toArray());
+                unitOfWork.ExecuteSql(UpdateQueries.get(className), values.toArray());
             }
 
             isDirty = false;

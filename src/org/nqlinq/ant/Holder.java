@@ -24,8 +24,10 @@ public class Holder {
     public final String Url;
     public final String User;
     public final String Password;
+    public final String CtxFactoryName;
+    public final String Dbms;
 
-    public Holder(String unitOfWork, String driver, String url, String user, String password, String source, String pkg, String seq, String dataSource) {
+    public Holder(String unitOfWork, String driver, String url, String user, String password, String source, String pkg, String seq, String dataSource, String ctxFactoryName, String dbms) {
         UnitOfWork = unitOfWork;
         Driver = driver;
         Url = url;
@@ -35,6 +37,8 @@ public class Holder {
         DataSource = dataSource;
         Package = pkg;
         Sequence = seq;
+        CtxFactoryName = ctxFactoryName;
+        Dbms = dbms;
 
         TableContents = new HashMap<String, String[]>();
         TableFields = new HashMap<String, ArrayList<DbField>>();
@@ -100,8 +104,12 @@ public class Holder {
         UnitOfWorkStream.println("@SuppressWarnings(\"ALL\")");
         if (!StringHelper.isNullOrEmpty(User))
             UnitOfWorkStream.println(MessageFormat.format("@JdbcConnection(driver = \"{0}\", url = \"{1}\", user = \"{2}\", password = \"{3}\")", Driver, Url, User, Password));
-        else
+        else {
             UnitOfWorkStream.println(MessageFormat.format("@JndiConnection(url = \"{0}\", source = \"{1}\")", Url, DataSource));
+            UnitOfWorkStream.println(MessageFormat.format("@ContextFactoryName(FQDN = \"{0}\")", CtxFactoryName));
+            if(!StringHelper.isNullOrEmpty(Dbms))
+                UnitOfWorkStream.println(MessageFormat.format("@DBMS(name = \"{0}\")", Dbms));
+        }
         UnitOfWorkStream.println(MessageFormat.format("public class {0} extends UnitOfWork '{'", UnitOfWork));
         UnitOfWorkStream.println(MessageFormat.format("    public {0}() '{'", UnitOfWork));
         UnitOfWorkStream.println("        super();");

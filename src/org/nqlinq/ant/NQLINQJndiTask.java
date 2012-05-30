@@ -18,6 +18,8 @@ public class NQLINQJndiTask extends Task {
     private String Src;
     private String Sequence;
     private Holder MainHolder;
+    private String DBMS;
+    private String ctxFactoryName;
 
     public String getSequence() {
         return Sequence;
@@ -75,13 +77,30 @@ public class NQLINQJndiTask extends Task {
         SqlFile = sqlFile;
     }
 
+    public String getDBMS() {
+        return DBMS;
+    }
+
+    public void setDBMS(String dbms) {
+        DBMS = dbms;
+    }
+
+    public String getCtxFactoryName() {
+        return ctxFactoryName;
+    }
+
+    public void setCtxFactoryName(String CtxFactoryName) {
+        ctxFactoryName = CtxFactoryName;
+    }
+
     public void execute() {
         String unitOfWork = MessageFormat.format("{0}UnitOfWork", getName());
         System.out.println(MessageFormat.format("Processing file: {0}...", getSqlFile()));
         System.out.println(MessageFormat.format("Unit of Work: {0}", unitOfWork));
         System.out.println(MessageFormat.format("Source: {0}", getSource()));
+        System.out.println(MessageFormat.format("DBMS: {0}", getDBMS()));
 
-        MainHolder = new Holder(unitOfWork, "", getUrl(), "", "", getSrc(), getPackage(), getSequence(), getSource());
+        MainHolder = new Holder(unitOfWork, "", getUrl(), "", "", getSrc(), getPackage(), getSequence(), getSource(), getCtxFactoryName(), getDBMS());
 
         try {
             String file = readFileAsString(getSqlFile());

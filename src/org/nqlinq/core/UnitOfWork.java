@@ -4,7 +4,7 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.Configuration;
 import org.apache.log4j.Logger;
 import org.nqlinq.annotations.*;
-import org.nqlinq.constants.IdentityStrings;
+import org.nqlinq.constants.DbStrings;
 import org.nqlinq.helpers.*;
 import snaq.db.ConnectionPool;
 
@@ -49,6 +49,7 @@ public class UnitOfWork {
             
             dbms = dbmsName == null || StringHelper.isNullOrEmpty(dbmsName.name()) ||
                     dbmsName.name().equals("null") ? "" : dbmsName.name();
+            DbStrings.init(dbms);
 
             if(StringHelper.isNullOrEmpty(jndi.url())){
                 assert jdbc != null;
@@ -138,6 +139,12 @@ public class UnitOfWork {
 
         entities.clear();
         removedEntities.clear();
+        setLogger(false);
+    }
+
+    public void discardChanges() {
+        entities.clear();
+        removedEntities.clear();
     }
 
     public String ExecuteInsert(String sql, String sequence, Object[] objects) {
@@ -148,7 +155,8 @@ public class UnitOfWork {
             PreparedStatement stmt = Conn.prepareStatement(sql);
 
             for (int i = 0; i < objects.length; i++) {
-                //System.out.println(" - " + objects[i]);
+                if(logQueries)
+                    System.out.println(" - " + objects[i]);
                 stmt.setObject(i + 1, objects[i]);
             }
 
@@ -165,7 +173,7 @@ public class UnitOfWork {
         try {
             if (StringHelper.isNullOrEmpty(dbms) || dbms.equals("Oracle")) {
                 Statement stmt = Conn.createStatement();
-                ResultSet rs = stmt.executeQuery(MessageFormat.format(IdentityStrings.oracleIdentityCurrVal, sequence));
+                ResultSet rs = stmt.executeQuery(MessageFormat.format(DbStrings.IdentityCurrVal, sequence));
                 rs.next();
                 retVal = rs.getString(1);
     
@@ -173,7 +181,7 @@ public class UnitOfWork {
                 stmt.close(); 
             } else if(dbms.equals("Postgres")){
                 Statement stmt = Conn.createStatement();
-                ResultSet rs = stmt.executeQuery(MessageFormat.format(IdentityStrings.postgresIdentityCurrVal, sequence));
+                ResultSet rs = stmt.executeQuery(MessageFormat.format(DbStrings.IdentityCurrVal, sequence));
                 rs.next();
                 retVal = rs.getString(1);
 

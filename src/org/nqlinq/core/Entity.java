@@ -3,7 +3,7 @@ package org.nqlinq.core;
 import org.nqlinq.annotations.Column;
 import org.nqlinq.annotations.Sequence;
 import org.nqlinq.annotations.Table;
-import org.nqlinq.constants.IdentityStrings;
+import org.nqlinq.constants.DbStrings;
 import org.nqlinq.helpers.StringHelper;
 
 import java.lang.reflect.Method;
@@ -106,10 +106,10 @@ public class Entity<T> {
 
         if (StringHelper.isNullOrEmpty(unitOfWork.dbms) || unitOfWork.dbms.equals("Oracle")) {
             columns.add("ID");
-            values.add(MessageFormat.format(IdentityStrings.oracleIdentityNextVal, seq.name()));
+            values.add(MessageFormat.format(DbStrings.IdentityNextVal, seq.name()));
         } else if(unitOfWork.dbms.equals("Postgres")){
             columns.add("ID");
-            values.add(MessageFormat.format(IdentityStrings.postgresIdentityNextVal, seq.name()));
+            values.add(MessageFormat.format(DbStrings.IdentityNextVal, seq.name()));
         }
 
         for (Method method : methods) {
@@ -151,11 +151,16 @@ public class Entity<T> {
 
                 if (col == null)
                     continue;
-                if(method.getName().endsWith("Id") || method.getReturnType().getName().toLowerCase().endsWith("long")
+                if(method.getName().endsWith("Id") && method.invoke(this).toString().equals("0")) {
+                    values.add(null);
+                }
+                else if(method.getName().endsWith("Id") || method.getReturnType().getName().toLowerCase().endsWith("long")
                         || method.getReturnType().getName().toLowerCase().endsWith("int")
                         || method.getReturnType().getName().toLowerCase().endsWith("float")
-                        || method.getReturnType().getName().toLowerCase().endsWith("double") )
+                        || method.getReturnType().getName().toLowerCase().endsWith("double"))
                     values.add(MessageFormat.format("{0}", method.invoke(this)).replaceAll(",", ""));
+                else if(method.getReturnType().getName().toLowerCase().endsWith("boolean"))
+                    values.add(Boolean.parseBoolean(method.invoke(this).toString()) ? 1 : 0);
                 else
                     values.add(MessageFormat.format("{0}", method.invoke(this)));
             }

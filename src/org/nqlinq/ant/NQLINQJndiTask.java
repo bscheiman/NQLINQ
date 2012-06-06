@@ -1,6 +1,7 @@
 package org.nqlinq.ant;
 
 import org.apache.tools.ant.Task;
+import org.nqlinq.constants.DbStrings;
 import org.nqlinq.helpers.WordHelper;
 
 import java.io.*;
@@ -99,7 +100,7 @@ public class NQLINQJndiTask extends Task {
         System.out.println(MessageFormat.format("Unit of Work: {0}", unitOfWork));
         System.out.println(MessageFormat.format("Source: {0}", getSource()));
         System.out.println(MessageFormat.format("DBMS: {0}", getDBMS()));
-
+        DbStrings.init(getDBMS());
         MainHolder = new Holder(unitOfWork, "", getUrl(), "", "", getSrc(), getPackage(), getSequence(), getSource(), getCtxFactoryName(), getDBMS());
 
         try {

@@ -54,13 +54,15 @@ public class Operation {
             return MessageFormat.format("{0} {1} ''%{2}%''", Column, Operator, Target);
         if (StringHelper.isNullOrEmpty(Order)) {
             if(Target.getClass().getName().toLowerCase().endsWith("int") ||
-                    Target.getClass().getName().toLowerCase().endsWith("long"))
+                    Target.getClass().getName().toLowerCase().endsWith("long") ||
+                    Column.equalsIgnoreCase("ROWNUM"))
                 return MessageFormat.format("{0} {1} ''{2}''", Column, Operator, Target).replace(",", "");
             return MessageFormat.format("{0} {1} ''{2}''", Column, Operator, Target);
         }
         else{
             if(Target.getClass().getName().toLowerCase().endsWith("int") ||
-                    Target.getClass().getName().toLowerCase().endsWith("long"))
+                    Target.getClass().getName().toLowerCase().endsWith("long") ||
+                    Column.equalsIgnoreCase("ROWNUM"))
                 return MessageFormat.format("{0} {1} ''{2}'' {3}", Column, Operator, Target, Order).replace(",", "");
             return MessageFormat.format("{0} {1} ''{2}'' {3}", Column, Operator, Target, Order);
         }

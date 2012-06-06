@@ -1,6 +1,7 @@
 package org.nqlinq.ant;
 
 import org.apache.tools.ant.Task;
+import org.nqlinq.constants.DbStrings;
 import org.nqlinq.helpers.WordHelper;
 
 import java.io.*;
@@ -97,7 +98,7 @@ public class NQLINQJdbcTask extends Task {
         String unitOfWork = MessageFormat.format("{0}UnitOfWork", getName());
         System.out.println(MessageFormat.format("Processing file: {0}...", getSqlFile()));
         System.out.println(MessageFormat.format("Unit of Work: {0}", unitOfWork));
-
+        DbStrings.init("");
         MainHolder = new Holder(unitOfWork, getDriver(), getUrl(), getUser(), getPassword(), getSrc(), getPackage(), getSequence(), "", "", "");
         
         try {

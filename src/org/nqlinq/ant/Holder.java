@@ -1,5 +1,6 @@
 package org.nqlinq.ant;
 
+import org.nqlinq.constants.DbStrings;
 import org.nqlinq.helpers.StringHelper;
 import org.nqlinq.helpers.WordHelper;
 
@@ -144,6 +145,28 @@ public class Holder {
                 UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> {1}(DualOperation oper) '{' return {1}(oper.toString()); '}'", singular, plural));
                 UnitOfWorkStream.println();
                 UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> {1}(Operation oper) '{' return {1}(oper.toString()); '}'", singular, plural));
+                UnitOfWorkStream.println();
+
+                UnitOfWorkStream.println(MessageFormat.format("    @TableObject(name = \"{0}.{1}\")", Package, singular));
+                UnitOfWorkStream.println("    @SuppressWarnings(\"unchecked\")");
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> Top{1}(String str, int count) '{'", singular, plural));
+                UnitOfWorkStream.println(MessageFormat.format("        TableAnnotationHolder holder = AnnotationHelper.GetTableAnnotations(this.getClass(), \"{0}\");", plural));
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("        Queryable<{0}> q = new Queryable<{0}>(this, holder.getTableObject().name(), new SelectTopCommand(holder.getTable().name(), count, new Where({2}str)));", singular, plural, DbStrings.AppendWhereVal));
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("        for ({0} obj: q)", singular));
+                UnitOfWorkStream.println("            add(obj);");
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println("        return q;");
+                UnitOfWorkStream.println("    }");
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> Top{1}(int count) '{' return Top{1}(\"1 = 1\", count); '}'", singular, plural));
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> Top{1}(OperationBuilder oper, int count) throws InvalidOperationException '{' return Top{1}(oper.getOperation(), count); '}'", singular, plural));
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> Top{1}(DualOperation oper, int count) '{' return Top{1}(oper.toString(), count); '}'", singular, plural));
+                UnitOfWorkStream.println();
+                UnitOfWorkStream.println(MessageFormat.format("    public Queryable<{0}> Top{1}(Operation oper, int count) '{' return Top{1}(oper.toString(), count); '}'", singular, plural));
                 UnitOfWorkStream.println();
 
 

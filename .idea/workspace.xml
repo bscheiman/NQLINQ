@@ -70,8 +70,8 @@
       <property name="field_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByClasses" value="true" />
       <property name="exception_breakpoints_viewId" value="TABLE" />
-      <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="field_breakpoints_viewId" value="TABLE" />
+      <property name="exception_breakpoints_groupByClasses" value="true" />
       <property name="method_breakpoints_groupByMethods" value="false" />
     </ui_properties>
   </component>
@@ -80,32 +80,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Entity.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/Entity.java">
+      <file leaf-file-name="NQLINQConnection.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/NQLINQConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="159" column="46" selection-start="6205" selection-end="6205" vertical-scroll-proportion="0.5702247">
+            <state line="24" column="43" selection-start="602" selection-end="602" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NQLINQJndiTask.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/ant/NQLINQJndiTask.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="102" column="58" selection-start="2304" selection-end="2304" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="e#403#445#0" expanded="true" />
-                <element signature="e#5049#5079#0" expanded="true" />
+                <element signature="e#252#280#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UnitOfWork.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/UnitOfWork.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="149" column="18" selection-start="4650" selection-end="4650" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DbStrings.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/constants/DbStrings.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="27" selection-start="690" selection-end="690" vertical-scroll-proportion="0.0">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -113,16 +103,7 @@
       <file leaf-file-name="Holder.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/nqlinq/ant/Holder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="154" column="214" selection-start="8261" selection-end="8261" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SelectCommand.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/commands/SelectCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="46" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0">
+            <state line="132" column="86" selection-start="5996" selection-end="5996" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -131,16 +112,62 @@
       <file leaf-file-name="Operation.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/nqlinq/queries/Operation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="20" selection-start="2338" selection-end="2338" vertical-scroll-proportion="0.0">
+            <state line="19" column="45" selection-start="586" selection-end="586" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Where.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/constraints/Where.java">
+      <file leaf-file-name="Entity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/Entity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="51" selection-start="276" selection-end="276" vertical-scroll-proportion="0.0">
+            <state line="39" column="24" selection-start="1581" selection-end="1581" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UnitOfWork.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/UnitOfWork.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="149" column="80" selection-start="4728" selection-end="4728" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#487#529#0" expanded="true" />
+                <element signature="e#1119#1149#0" expanded="true" />
+                <element signature="e#3334#3364#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NQLINQJdbcTask.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/ant/NQLINQJdbcTask.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="107" column="8" selection-start="2060" selection-end="2060" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Queryable.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/Queryable.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="30" column="40" selection-start="990" selection-end="990" vertical-scroll-proportion="-2.2993422">
+              <folding>
+                <element signature="e#381#423#0" expanded="true" />
+                <element signature="e#683#713#0" expanded="true" />
+                <element signature="e#2181#2211#0" expanded="true" />
+                <element signature="e#2830#2860#0" expanded="true" />
+                <element signature="e#3510#3540#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="OperationBuilder.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/nqlinq/queries/OperationBuilder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="31" selection-start="345" selection-end="345" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -149,7 +176,7 @@
       <file leaf-file-name="SelectTopCommand.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/nqlinq/commands/SelectTopCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="75" selection-start="778" selection-end="778" vertical-scroll-proportion="0.0">
+            <state line="2" column="28" selection-start="58" selection-end="58" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -169,22 +196,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/org/nqlinq/core/Queryable.java" />
-        <option value="$PROJECT_DIR$/src/org/nqlinq/helpers/LoggerHelper.java" />
         <option value="$PROJECT_DIR$/src/org/nqlinq/helpers/StringHelper.java" />
         <option value="$PROJECT_DIR$/src/org/nqlinq/annotations/ContextFactoryName.java" />
         <option value="$PROJECT_DIR$/src/org/nqlinq/annotations/DBMS.java" />
         <option value="$PROJECT_DIR$/src/org/nqlinq/constants/IdentityStrings.java" />
         <option value="$PROJECT_DIR$/src/org/nqlinq/commands/SelectCommand.java" />
-        <option value="$PROJECT_DIR$/src/org/nqlinq/ant/NQLINQJndiTask.java" />
+        <option value="$PROJECT_DIR$/src/org/nqlinq/constants/DbStrings.java" />
+        <option value="$PROJECT_DIR$/src/org/nqlinq/commands/SelectTopCommand.java" />
+        <option value="$PROJECT_DIR$/src/org/nqlinq/ant/DbField.java" />
+        <option value="$PROJECT_DIR$/src/org/nqlinq/helpers/ConversionHelper.java" />
         <option value="$PROJECT_DIR$/src/org/nqlinq/ant/NQLINQJdbcTask.java" />
         <option value="$PROJECT_DIR$/src/org/nqlinq/ant/Holder.java" />
-        <option value="$PROJECT_DIR$/src/org/nqlinq/queries/Operation.java" />
-        <option value="$PROJECT_DIR$/src/org/nqlinq/commands/SelectTopCommand.java" />
-        <option value="$PROJECT_DIR$/src/org/nqlinq/core/UnitOfWork.java" />
-        <option value="$PROJECT_DIR$/src/org/nqlinq/helpers/ConversionHelper.java" />
-        <option value="$PROJECT_DIR$/src/org/nqlinq/constants/DbStrings.java" />
         <option value="$PROJECT_DIR$/src/org/nqlinq/core/Entity.java" />
+        <option value="$PROJECT_DIR$/src/org/nqlinq/ant/NQLINQJndiTask.java" />
+        <option value="$PROJECT_DIR$/src/org/nqlinq/queries/Operation.java" />
+        <option value="$PROJECT_DIR$/src/org/nqlinq/core/UnitOfWork.java" />
+        <option value="$PROJECT_DIR$/src/org/nqlinq/core/Queryable.java" />
       </list>
     </option>
   </component>
@@ -224,6 +251,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -257,9 +285,158 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nqlinq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nqlinq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="queries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nqlinq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="objects" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nqlinq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="helpers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nqlinq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nqlinq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="constants" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NQLINQ" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nqlinq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ant" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Favorites" />
     </panes>
   </component>
@@ -277,9 +454,9 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -428,22 +605,23 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1296" height="816" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="18" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.36377475" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18440293" sideWeight="0.59292036" order="1" side_tool="false" content_ui="tabs" x="112" y="868" width="235" height="1018" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36377475" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18440293" sideWeight="0.716895" order="1" side_tool="false" content_ui="tabs" x="112" y="868" width="235" height="1018" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29174852" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="19" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28310502" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="RESTClient" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32907662" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24973261" sideWeight="0.7082515" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329455" sideWeight="0.67022413" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3995451" sideWeight="0.59530795" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20389926" sideWeight="0.6362253" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20389926" sideWeight="0.6362253" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40707964" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -460,8 +638,8 @@
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Analysis" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="CVS" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Web Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="17" side_tool="false" content_ui="tabs" />
@@ -524,51 +702,39 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/Single.java">
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/ant/DbField.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="13" selection-start="421" selection-end="421" vertical-scroll-proportion="-0.36348686">
-          <folding />
-        </state>
+        <state line="88" column="5" selection-start="2586" selection-end="2586" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/commands/BaseCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/commands/SelectCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="22" selection-start="99" selection-end="99" vertical-scroll-proportion="0.1118421">
-          <folding />
-        </state>
+        <state line="13" column="46" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/Queryable.java">
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/constraints/Where.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="59" selection-start="3290" selection-end="3290" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="11" column="51" selection-start="276" selection-end="276" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/annotations/DBMS.java">
+    <entry file="jar://C:/bea10/jdk150_15/src.zip!/java/lang/StackTraceElement.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="29" selection-start="192" selection-end="192" vertical-scroll-proportion="0.0" />
+        <state line="99" column="18" selection-start="4211" selection-end="4211" vertical-scroll-proportion="0.33223686" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/constraints/OrderBy.java">
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/constants/DbStrings.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="13" selection-start="120" selection-end="120" vertical-scroll-proportion="0.1118421">
-          <folding />
-        </state>
+        <state line="24" column="66" selection-start="1049" selection-end="1049" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/NQLINQConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="43" selection-start="602" selection-end="602" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/nqlinq/ant/NQLINQJndiTask.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="103" column="0" selection-start="2305" selection-end="2305" vertical-scroll-proportion="0.51428574">
-          <folding>
-            <element signature="e#252#280#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/ant/NQLINQJdbcTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="24" selection-start="2100" selection-end="2100" vertical-scroll-proportion="0.45714286">
+        <state line="102" column="58" selection-start="2304" selection-end="2304" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#252#280#0" expanded="true" />
           </folding>
@@ -577,66 +743,71 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/nqlinq/ant/Holder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="154" column="214" selection-start="8261" selection-end="8261" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/commands/SelectCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="46" selection-start="362" selection-end="362" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/queries/Operation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="20" selection-start="2338" selection-end="2338" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/constraints/Where.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="51" selection-start="276" selection-end="276" vertical-scroll-proportion="0.0">
+        <state line="132" column="86" selection-start="5996" selection-end="5996" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/nqlinq/commands/SelectTopCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="75" selection-start="778" selection-end="778" vertical-scroll-proportion="0.0">
+        <state line="2" column="28" selection-start="58" selection-end="58" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/helpers/LoggerHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="46" selection-start="296" selection-end="296" vertical-scroll-proportion="0.19572368">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/helpers/ConversionHelper.java">
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/queries/OperationBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="60" selection-start="1956" selection-end="1956" vertical-scroll-proportion="1.6217105">
+        <state line="13" column="31" selection-start="345" selection-end="345" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/constants/DbStrings.java">
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/queries/Operation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="27" selection-start="690" selection-end="690" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/UnitOfWork.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="149" column="18" selection-start="4650" selection-end="4650" vertical-scroll-proportion="0.0">
+        <state line="19" column="45" selection-start="586" selection-end="586" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/Entity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="159" column="46" selection-start="6205" selection-end="6205" vertical-scroll-proportion="0.5702247">
+        <state line="39" column="24" selection-start="1581" selection-end="1581" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/ant/NQLINQJdbcTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="107" column="8" selection-start="2060" selection-end="2060" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/UnitOfWork.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="149" column="80" selection-start="4728" selection-end="4728" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#403#445#0" expanded="true" />
-            <element signature="e#5049#5079#0" expanded="true" />
+            <element signature="e#487#529#0" expanded="true" />
+            <element signature="e#1119#1149#0" expanded="true" />
+            <element signature="e#3334#3364#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/nqlinq/core/Queryable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="40" selection-start="990" selection-end="990" vertical-scroll-proportion="-2.2993422">
+          <folding>
+            <element signature="e#381#423#0" expanded="true" />
+            <element signature="e#683#713#0" expanded="true" />
+            <element signature="e#2181#2211#0" expanded="true" />
+            <element signature="e#2830#2860#0" expanded="true" />
+            <element signature="e#3510#3540#0" expanded="true" />
           </folding>
         </state>
       </provider>

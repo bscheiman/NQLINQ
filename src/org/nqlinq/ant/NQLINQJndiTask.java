@@ -101,7 +101,9 @@ public class NQLINQJndiTask extends Task {
         System.out.println(MessageFormat.format("Source: {0}", getSource()));
         System.out.println(MessageFormat.format("DBMS: {0}", getDBMS()));
         DbStrings.init(getDBMS());
+
         MainHolder = new Holder(unitOfWork, "", getUrl(), "", "", getSrc(), getPackage(), getSequence(), getSource(), getCtxFactoryName(), getDBMS());
+
 
         try {
             String file = readFileAsString(getSqlFile());
@@ -111,7 +113,7 @@ public class NQLINQJndiTask extends Task {
 
             while (m.find()) {
                 String table = m.group(1);
-                String[] contents = m.group(2).replace("Id INT NOT NULL PRIMARY KEY, ", "").split(", (?!\\d+)");
+                String[] contents = m.group(2).replace("Id INT NOT NULL PRIMARY KEY, ", "").replace("ON DELETE CASCADE", "").split(", (?!\\d+)");
 
                 MainHolder.add(table, contents);
 
@@ -138,8 +140,11 @@ public class NQLINQJndiTask extends Task {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        MainHolder.execute();
+        try {
+            MainHolder.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static String readFileAsString(String filePath) throws java.io.IOException {

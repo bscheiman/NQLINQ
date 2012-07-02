@@ -108,14 +108,15 @@ public class Holder {
         else {
             UnitOfWorkStream.println(MessageFormat.format("@JndiConnection(url = \"{0}\", source = \"{1}\")", Url, DataSource));
             UnitOfWorkStream.println(MessageFormat.format("@ContextFactoryName(FQDN = \"{0}\")", CtxFactoryName));
-            if(!StringHelper.isNullOrEmpty(Dbms))
-                UnitOfWorkStream.println(MessageFormat.format("@DBMS(name = \"{0}\")", Dbms));
         }
+        if(!StringHelper.isNullOrEmpty(Dbms))
+            UnitOfWorkStream.println(MessageFormat.format("@DBMS(name = \"{0}\")", Dbms));
         UnitOfWorkStream.println(MessageFormat.format("public class {0} extends UnitOfWork '{'", UnitOfWork));
         UnitOfWorkStream.println(MessageFormat.format("    public {0}() '{'", UnitOfWork));
         UnitOfWorkStream.println("        super();");
         UnitOfWorkStream.println("    }");
         UnitOfWorkStream.println();
+        System.out.println(UnitOfWork + " created");
 
         try {
             for (String table : TableContents.keySet()) {
@@ -353,21 +354,28 @@ public class Holder {
                     whereFieldStream.println();
                     whereFieldStream.println("@SuppressWarnings(\"ALL\")");
                     whereFieldStream.println(MessageFormat.format("public class {0} '{'", field.getField()));
-                    whereFieldStream.println(MessageFormat.format("    public static Operation Equals({0} obj) '{' return new Operation(\"{1}\", \"=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
-                    whereFieldStream.println();
-                    whereFieldStream.println(MessageFormat.format("    public static Operation DoesNotEqual({0} obj) '{' return new Operation(\"{1}\", \"!=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
-                    whereFieldStream.println();
-                    whereFieldStream.println(MessageFormat.format("    public static Operation IsGreaterThan({0} obj) '{' return new Operation(\"{1}\", \">\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
-                    whereFieldStream.println();
-                    whereFieldStream.println(MessageFormat.format("    public static Operation IsLessThan({0} obj) '{' return new Operation(\"{1}\", \"<\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
-                    whereFieldStream.println();
-                    whereFieldStream.println(MessageFormat.format("    public static Operation IsGreaterThanOrEquals({0} obj) '{' return new Operation(\"{1}\", \">=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
-                    whereFieldStream.println();
-                    whereFieldStream.println(MessageFormat.format("    public static Operation IsLessThanOrEquals({0} obj) '{' return new Operation(\"{1}\", \"<=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
-                    whereFieldStream.println();
-                    whereFieldStream.println(MessageFormat.format("    public static Operation Like(String str) '{' return new Operation(\"{1}\", \"LIKE\", str); '}'", field.getMappedType(), field.getField().toUpperCase()));
-                    whereFieldStream.println();
-                    whereFieldStream.println(MessageFormat.format("    public static Operation In(String str) '{' return new Operation(\"{1}\", \"IN\", MessageFormat.format(\"('{'0'}')\", str)); '}'", field.getMappedType(), field.getField().toUpperCase()));
+                    if(field.getMappedType().equals("boolean")) {
+                        whereFieldStream.println(MessageFormat.format("    public static Operation Equals({0} obj) '{' return new Operation(\"{1}\", \"=\", {2} ? 1 : 0); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
+                        whereFieldStream.println();
+                        whereFieldStream.println(MessageFormat.format("    public static Operation DoesNotEqual({0} obj) '{' return new Operation(\"{1}\", \"!=\", {2} ? 1 : 0); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
+                    }
+                    else {
+                        whereFieldStream.println(MessageFormat.format("    public static Operation Equals({0} obj) '{' return new Operation(\"{1}\", \"=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
+                        whereFieldStream.println();
+                        whereFieldStream.println(MessageFormat.format("    public static Operation DoesNotEqual({0} obj) '{' return new Operation(\"{1}\", \"!=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
+                        whereFieldStream.println();
+                        whereFieldStream.println(MessageFormat.format("    public static Operation IsGreaterThan({0} obj) '{' return new Operation(\"{1}\", \">\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
+                        whereFieldStream.println();
+                        whereFieldStream.println(MessageFormat.format("    public static Operation IsLessThan({0} obj) '{' return new Operation(\"{1}\", \"<\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
+                        whereFieldStream.println();
+                        whereFieldStream.println(MessageFormat.format("    public static Operation IsGreaterThanOrEquals({0} obj) '{' return new Operation(\"{1}\", \">=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
+                        whereFieldStream.println();
+                        whereFieldStream.println(MessageFormat.format("    public static Operation IsLessThanOrEquals({0} obj) '{' return new Operation(\"{1}\", \"<=\", {2}); '}'", field.getMappedType(), field.getField().toUpperCase(), obj));
+                        whereFieldStream.println();
+                        whereFieldStream.println(MessageFormat.format("    public static Operation Like(String str) '{' return new Operation(\"{1}\", \"LIKE\", str); '}'", field.getMappedType(), field.getField().toUpperCase()));
+                        whereFieldStream.println();
+                        whereFieldStream.println(MessageFormat.format("    public static Operation In(String str) '{' return new Operation(\"{1}\", \"IN\", MessageFormat.format(\"('{'0'}')\", str)); '}'", field.getMappedType(), field.getField().toUpperCase()));
+                    }
                     whereFieldStream.println("}");
 
                     whereFieldStream.close();

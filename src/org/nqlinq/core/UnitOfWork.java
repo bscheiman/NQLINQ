@@ -51,7 +51,7 @@ public class UnitOfWork {
                     dbmsName.name().equals("null") ? "" : dbmsName.name();
             DbStrings.init(dbms);
 
-            if(StringHelper.isNullOrEmpty(jndi.url())){
+            if(jndi == null || StringHelper.isNullOrEmpty(jndi.url())){
                 assert jdbc != null;
                 Class c = Class.forName(jdbc.driver());
                 Driver driver = (Driver) c.newInstance();
@@ -156,12 +156,24 @@ public class UnitOfWork {
 
             for (int i = 0; i < objects.length; i++) {
                 if(logQueries)
-                    System.out.println(" - " + objects[i]);
-                stmt.setObject(i + 1, objects[i]);
+                    logger.debug(objects[i].getClass().getName() + " - " + objects[i]);
+                if (objects[i].getClass().getName().toLowerCase().endsWith("long"))
+                stmt.setLong(i + 1, Long.parseLong(objects[i].toString()));
+                else if (objects[i].getClass().getName().toLowerCase().endsWith("int"))
+                    stmt.setInt(i + 1, Integer.parseInt(objects[i].toString()));
+                else if (objects[i].getClass().getName().toLowerCase().endsWith("float"))
+                    stmt.setFloat(i + 1, Float.parseFloat(objects[i].toString()));
+                else if (objects[i].getClass().getName().toLowerCase().endsWith("double"))
+                    stmt.setDouble(i + 1, Double.parseDouble(objects[i].toString()));
+                else if (objects[i].getClass().getName().toLowerCase().endsWith("boolean"))
+                    stmt.setInt(i + 1, Boolean.parseBoolean(objects[i].toString()) ? 1 : 0);
+                else
+                    stmt.setObject(i + 1, objects[i]);
             }
 
-            if(logQueries)
+            if(logQueries) {
                 logger.debug(sql);
+            }
 
             stmt.execute();
 
@@ -173,7 +185,7 @@ public class UnitOfWork {
         try {
             if (StringHelper.isNullOrEmpty(dbms) || dbms.equals("Oracle")) {
                 Statement stmt = Conn.createStatement();
-                ResultSet rs = stmt.executeQuery(MessageFormat.format(DbStrings.IdentityCurrVal, sequence));
+                ResultSet rs = stmt.executeQuery(DbStrings.IdentityCurrVal.replace("{0}", sequence));
                 rs.next();
                 retVal = rs.getString(1);
     
@@ -181,7 +193,7 @@ public class UnitOfWork {
                 stmt.close(); 
             } else if(dbms.equals("Postgres")){
                 Statement stmt = Conn.createStatement();
-                ResultSet rs = stmt.executeQuery(MessageFormat.format(DbStrings.IdentityCurrVal, sequence));
+                ResultSet rs = stmt.executeQuery(DbStrings.IdentityCurrVal.replace("{0}", sequence));
                 rs.next();
                 retVal = rs.getString(1);
 
@@ -199,8 +211,11 @@ public class UnitOfWork {
         try {
             open();
             PreparedStatement stmt = Conn.prepareStatement(sql);
-            for (int i = 0; i < objects.length; i++)
+            for (int i = 0; i < objects.length; i++) {
+                if(logQueries)
+                    logger.debug(objects[i].getClass().getName() + " - " + objects[i]);
                 stmt.setObject(i + 1, objects[i]);
+            }
 
             if(logQueries)
                 logger.debug(sql);

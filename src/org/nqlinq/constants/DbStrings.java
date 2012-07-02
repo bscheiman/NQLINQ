@@ -16,8 +16,8 @@ public class DbStrings {
             AppendWhereVal = "new Operation(\"ROWNUM\", \"<=\", count).toString() + \" AND \" + ";
             AppendVal = "";
         } else if(Db.equalsIgnoreCase("Postgres")){
-            IdentityCurrVal = "SELECT currval('{0}')";
-            IdentityNextVal = "nextval('{0}')";
+            IdentityCurrVal = "SELECT currval(\'{0}\')";
+            IdentityNextVal = "nextval(\'{0}\')";
             SelectVal = "SELECT * FROM {0}";
             AppendWhereVal = "";
             AppendVal = " LIMIT {0}";

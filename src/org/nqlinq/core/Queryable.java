@@ -36,7 +36,7 @@ public class Queryable<T extends Entity> implements Iterable<T> {
 
             String sql = cmd.getSql();
             if(uow.logQueries)
-                UnitOfWork.logger.debug(sql);
+                uow.logger.debug(sql);
             ResultSet rs = stmt.executeQuery(sql);
 
             try {

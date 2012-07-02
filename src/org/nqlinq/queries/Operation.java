@@ -48,8 +48,11 @@ public class Operation {
 
     @Override
     public String toString() {
-        if (Operator.equals("IN"))
-            return MessageFormat.format("{0} {1} {2}", Column, Operator, ((String)Target).replaceAll(", ", "','").replaceAll("\\(", "('").replaceAll("\\)", "')"));
+        if (Operator.equals("IN")){
+            if(StringHelper.isNullOrEmpty((String)Target))
+                return "";
+            return MessageFormat.format("{0} {1} {2}", Column, Operator, ((String)Target).replaceAll(",", "','").replaceAll(", ", "','").replaceAll("\\(", "('").replaceAll("\\)", "')"));
+        }
         if (Operator.equals("LIKE"))
             return MessageFormat.format("{0} {1} ''%{2}%''", Column, Operator, Target);
         if (StringHelper.isNullOrEmpty(Order)) {

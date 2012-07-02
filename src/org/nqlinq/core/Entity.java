@@ -106,10 +106,10 @@ public class Entity<T> {
 
         if (StringHelper.isNullOrEmpty(unitOfWork.dbms) || unitOfWork.dbms.equals("Oracle")) {
             columns.add("ID");
-            values.add(MessageFormat.format(DbStrings.IdentityNextVal, seq.name()));
+            values.add(DbStrings.IdentityNextVal.replace("{0}",seq.name()));
         } else if(unitOfWork.dbms.equals("Postgres")){
             columns.add("ID");
-            values.add(MessageFormat.format(DbStrings.IdentityNextVal, seq.name()));
+            values.add(DbStrings.IdentityNextVal.replace("{0}",seq.name()));
         }
 
         for (Method method : methods) {
@@ -141,7 +141,7 @@ public class Entity<T> {
             return;
 
         try {
-            ArrayList values = new ArrayList<String>();
+            ArrayList values = new ArrayList<Object>();
             Method[] methods = this.getClass().getMethods();
             for (Method method : methods) {
                 if (!method.getName().startsWith("get") || method.getName().equals("getId"))
@@ -158,7 +158,7 @@ public class Entity<T> {
                         || method.getReturnType().getName().toLowerCase().endsWith("int")
                         || method.getReturnType().getName().toLowerCase().endsWith("float")
                         || method.getReturnType().getName().toLowerCase().endsWith("double"))
-                    values.add(MessageFormat.format("{0}", method.invoke(this)).replaceAll(",", ""));
+                    values.add(method.invoke(this));
                 else if(method.getReturnType().getName().toLowerCase().endsWith("boolean"))
                     values.add(Boolean.parseBoolean(method.invoke(this).toString()) ? 1 : 0);
                 else
@@ -169,7 +169,7 @@ public class Entity<T> {
                 Sequence seq = this.getClass().getAnnotation(Sequence.class);
                 setId(unitOfWork.ExecuteInsert(InsertQueries.get(className), seq.name(), values.toArray()));
             } else {
-                values.add(MessageFormat.format("{0}", Id).replaceAll(",", ""));
+                values.add(Id);
                 unitOfWork.ExecuteSql(UpdateQueries.get(className), values.toArray());
             }
 

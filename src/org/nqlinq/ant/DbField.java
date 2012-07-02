@@ -64,7 +64,7 @@ public class DbField {
         if (getType().equals("VARCHAR2") || getType().equals("CHAR") || getType().equals("VARCHAR"))
             return "String";
 
-        if (getType().equals("NUMBER") && getLength() == 1)
+        if ((getType().equals("NUMBER") && getLength() == 1) || (getType().equals("NUMERIC") && getLength() == 1))
             return "boolean";
 
         if ((getType().equals("NUMBER") && getLength() < 15) || getType().equals("INT") || getType().equals("TINYINT") || getType().equals("SMALLINT"))

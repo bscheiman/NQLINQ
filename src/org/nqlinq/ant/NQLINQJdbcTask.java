@@ -21,6 +21,7 @@ public class NQLINQJdbcTask extends Task {
     private String Src;
     private String Sequence;
     private Holder MainHolder;
+    private String DBMS;
 
     public String getSequence() {
         return Sequence;
@@ -94,12 +95,20 @@ public class NQLINQJdbcTask extends Task {
         SqlFile = sqlFile;
     }
 
+    public String getDBMS() {
+        return DBMS;
+    }
+
+    public void setDBMS(String dbms) {
+        DBMS = dbms;
+    }
+
     public void execute() {
         String unitOfWork = MessageFormat.format("{0}UnitOfWork", getName());
         System.out.println(MessageFormat.format("Processing file: {0}...", getSqlFile()));
         System.out.println(MessageFormat.format("Unit of Work: {0}", unitOfWork));
-        DbStrings.init("");
-        MainHolder = new Holder(unitOfWork, getDriver(), getUrl(), getUser(), getPassword(), getSrc(), getPackage(), getSequence(), "", "", "");
+        DbStrings.init(getDBMS());
+        MainHolder = new Holder(unitOfWork, getDriver(), getUrl(), getUser(), getPassword(), getSrc(), getPackage(), getSequence(), "", "", getDBMS());
         
         try {
             String file = readFileAsString(getSqlFile());

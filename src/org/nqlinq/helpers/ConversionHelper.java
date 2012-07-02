@@ -14,17 +14,17 @@ public class ConversionHelper {
     }
 
     public static String ConvertToString(String str) {
-        return str;
+        return StringHelper.isNullOrEmpty(str) ? "" : str;
     }
 
     public static int ConvertToInt(String str) {
-        return Integer.parseInt(str);
+        return Integer.parseInt(StringHelper.isNullOrEmpty(str) ? "0" : str);
     }
 
     public static Timestamp ConvertToTimestamp(String str) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Date date = formatter.parse(str);
+            Date date = StringHelper.isNullOrEmpty(str) ? new Timestamp(new Date(0L).getTime()) : formatter.parse(str);
 
             return new Timestamp(date.getTime());
         } catch (ParseException ex) {
@@ -33,22 +33,23 @@ public class ConversionHelper {
     }
 
     public static float ConvertToFloat(String str) {
-        return Float.parseFloat(str);
+        return Float.parseFloat(StringHelper.isNullOrEmpty(str) ? "0" : str);
     }
 
     public static boolean ConvertToBoolean(String str) {
-        return Boolean.parseBoolean(str);
+        return Boolean.parseBoolean(StringHelper.isNullOrEmpty(str) ? "false" : str);
     }
 
     public static double ConvertToDouble(String str) {
-        return Double.parseDouble(str);
+        return Double.parseDouble(StringHelper.isNullOrEmpty(str) ? "0" : str);
     }
 
     public static long ConvertToLong(String str) {
-        return Long.parseLong(str);
+        return Long.parseLong(StringHelper.isNullOrEmpty(str) ? "0" : str);
     }
 
     public static BigDecimal ConvertToBigdecimal(String str) {
+        str = StringHelper.isNullOrEmpty(str) ? "0" : str;
         final DecimalFormatSymbols symbols;
         final char groupSeparatorChar;
         final String groupSeparator;
